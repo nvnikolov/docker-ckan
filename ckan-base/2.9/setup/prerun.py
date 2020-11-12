@@ -117,7 +117,7 @@ def init_datastore_db():
 
         perms_sql = datastore_perms.stdout.read()
         # Remove internal pg command as psycopg2 does not like it
-        perms_sql = re.sub(b'\\\\connect "(.*)"', "", perms_sql)
+        perms_sql = re.sub(b'\\\\connect "(.*)"', b"", perms_sql)
         cursor.execute(perms_sql)
         for notice in connection.notices:
             print(notice)
@@ -153,9 +153,9 @@ def create_sysadmin():
     if name and password and email:
 
         # Check if user exists
-        command = ["ckan", "-c", ckan_ini, "user", name]
+        command = ["ckan", "-c", ckan_ini, "user", "show", name]
 
-        out = subprocess.check_output(command)
+        out = subprocess.check_output(command).decode(sys.stdout.encoding)
         if "User:None" not in re.sub(r"\s", "", out):
             print("[prerun] Sysadmin user exists, skipping creation")
             return
