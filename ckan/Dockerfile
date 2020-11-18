@@ -1,4 +1,4 @@
-FROM nikolayn/ckan-base:2.9
+FROM nikolayn/ckan-base:2.8
 
 MAINTAINER Your Name Here <nikolay.nikolov@sintef.no>
 
@@ -8,8 +8,10 @@ RUN echo $TZ > /etc/timezone
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime
 
 # Install CKAN DCAT extension
-RUN pip install -e git+https://github.com/ckan/ckanext-dcat.git#egg=ckanext-dcat && \
+RUN pip install -e git+https://github.com/ckan/ckanext-dcat.git@v1.0.0#egg=ckanext-dcat && \
     pip install -r https://github.com/ckan/ckanext-dcat/raw/master/requirements.txt
+RUN pip install ckanext-privatedatasets
+RUN pip install ckanext-datarequests
 
 COPY patches ${APP_DIR}/patches
 
